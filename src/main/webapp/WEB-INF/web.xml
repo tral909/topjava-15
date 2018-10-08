@@ -9,7 +9,7 @@
     <servlet>
         <servlet-name>userServlet</servlet-name>
         <servlet-class>ru.javawebinar.topjava.web.UserServlet</servlet-class>
-        <load-on-startup>0</load-on-startup>
+        <!--<load-on-startup>0</load-on-startup>-->
     </servlet>
     <servlet-mapping>
         <servlet-name>userServlet</servlet-name>
@@ -22,6 +22,6 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>mealServlet</servlet-name>
-        <url-pattern>/</url-pattern>
+        <url-pattern>/meals</url-pattern>
     </servlet-mapping>
 </web-app>
