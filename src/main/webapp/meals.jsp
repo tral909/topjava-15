@@ -4,25 +4,28 @@
 <%@ taglib prefix="f" uri="http://mycompany.com/functions" %>
 <html>
 <head>
-    <title>meals</title>
+    <title>Список еды</title>
 </head>
 <body>
     <table border="1" cellspacing="0" cellpadding="5">
         <tr>
-            <th>datetime</th>
-            <th>description</th>
-            <th>calories</th>
+            <th>Дата и время</th>
+            <th>Описание</th>
+            <th>Калории</th>
+            <th colspan="2">Действия</th>
         </tr>
-        <c:forEach items="${meals}" var="meal">
+        <c:forEach items="${meals}" var="meal" varStatus="loop">
             <tr style="color: ${meal.exceed eq true ? "red" : "green"};">
                 <td>${f:formatLocalDateTime(meal.dateTime, "yyyy-MM-dd HH:mm")}</td>
                 <td>${meal.description}</td>
                 <td>${meal.calories}</td>
+                <td><a href="${pageContext.servletContext.contextPath}/meals?action=put&id=${loop.index}">Изменить</a></td>
+                <td><a href="${pageContext.servletContext.contextPath}/meals?action=delete&id=${loop.index}">Удалить</a></td>
             </tr>
         </c:forEach>
     </table>
-    <h2>Add new meal</h2>
-    <form method="post" action="meals">
+    <h2>Добавить новую еду</h2>
+    <form method="post" action="${pageContext.servletContext.contextPath}/meals?action=add">
         <p><label>Введите дату и время: <input type="datetime-local" name="datetime" required/></label></p>
         <p><label>Введите описание: <input type="text" name="description" required/></label></p>
         <p><label>Введите кол-во калорий: <input type="number" min="0" max="10000" name="calories" required/></label></p>
