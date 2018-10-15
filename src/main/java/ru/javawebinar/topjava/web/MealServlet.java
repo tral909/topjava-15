@@ -6,6 +6,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.repository.mock.InMemoryMealRepositoryImpl;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.user.ProfileRestController;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -20,11 +21,13 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
+    private ProfileRestController profile;
     private MealRepository repository;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
+        profile = new ProfileRestController();
         repository = new InMemoryMealRepositoryImpl();
     }
 
@@ -57,8 +60,8 @@ public class MealServlet extends HttpServlet {
             case "create":
             case "update":
                 final Meal meal = "create".equals(action) ?
-                        new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
-                        repository.get(getId(request));
+                        new Meal(profile.get().getId(), LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000) :
+                        repository.get(getId(request), profile.get().getId());
                 request.setAttribute("meal", meal);
                 request.getRequestDispatcher("/mealForm.jsp").forward(request, response);
                 break;
@@ -66,7 +69,7 @@ public class MealServlet extends HttpServlet {
             default:
                 log.info("getAll");
                 request.setAttribute("meals",
-                        MealsUtil.getWithExceeded(repository.getAll(), MealsUtil.DEFAULT_CALORIES_PER_DAY));
+                        MealsUtil.getWithExceeded(repository.getAll(profile.get().getId()), MealsUtil.DEFAULT_CALORIES_PER_DAY));
                 request.getRequestDispatcher("/meals.jsp").forward(request, response);
                 break;
         }
