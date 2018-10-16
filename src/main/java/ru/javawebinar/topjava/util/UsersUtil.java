@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
  */
 public class UsersUtil {
     public static final List<User> USERS = Arrays.asList(
-            new User(1, "Tony", "tonytadzh@gmail.com", "1qaz2wsx", Role.ROLE_ADMIN, Role.ROLE_USER),
-            new User(2, "Smoke", "smokimo@rambler.com", "biga", Role.ROLE_USER),
-            new User(3, "Chacha", "chacha@ya.ru", "rabotnichek", Role.ROLE_USER),
-            new User(4, "Duplet", "dupa@mail.ru", "dupadu", Role.ROLE_ADMIN)
+            new User("Tony", "tonytadzh@gmail.com", "1qaz2wsx", Role.ROLE_ADMIN, Role.ROLE_USER),
+            new User("Smoke", "smokimo@rambler.com", "biga", Role.ROLE_USER),
+            new User("Chacha", "chacha@ya.ru", "rabotnichek", Role.ROLE_USER),
+            new User("Duplet", "dupa@mail.ru", "dupadu", Role.ROLE_ADMIN)
     );
 
     public static List<User> getSorted(Collection<User> users) {
