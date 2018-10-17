@@ -23,10 +23,10 @@
     <a href="meals?action=create">Add Meal</a>
     <form action="meals" method="get">
         <input hidden name="action" value="filter" />
-        <label>От даты: <input type="date" name="startDate" /></label>
-        <label>До даты: <input type="date" name="endDate" /></label>
-        <label>От времени: <input type="time" name="startTime" /></label>
-        <label>До времени: <input type="time" name="endTime" /></label>
+        <label>От даты: <input type="date" name="startDate" value="${param.startDate}" /></label>
+        <label>До даты: <input type="date" name="endDate" value="${param.endDate}" /></label>
+        <label>От времени: <input type="time" name="startTime" value="${param.startTime}" /></label>
+        <label>До времени: <input type="time" name="endTime" value="${param.endTime}" /></label>
         <button type="submit">Filter</button>
     </form>
     <hr/>

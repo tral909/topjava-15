@@ -27,7 +27,7 @@ public class MealRestController {
 
     public List<MealWithExceed> getAll() {
         log.info("getAll");
-        List<Meal> meals = service.getAll(SecurityUtil.authUserId());
+        List<Meal> meals = service.getAll(SecurityUtil.getAuthUserId());
         return MealsUtil.getWithExceeded(meals, SecurityUtil.authUserCaloriesPerDay());
     }
 
@@ -61,7 +61,7 @@ public class MealRestController {
             }
         }
 
-        List<Meal> meals = service.getAll(SecurityUtil.authUserId());
+        List<Meal> meals = service.getAll(SecurityUtil.getAuthUserId());
         int calories = SecurityUtil.authUserCaloriesPerDay();
 
         if (isDateValid && isTimeValid) {
@@ -79,7 +79,7 @@ public class MealRestController {
 
     public Meal get(int idMeal) {
         log.info("get {}", idMeal);
-        return service.get(idMeal, SecurityUtil.authUserId());
+        return service.get(idMeal, SecurityUtil.getAuthUserId());
     }
 
     public Meal create(Meal meal) {

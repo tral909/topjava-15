@@ -7,7 +7,7 @@ import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.repository.UserRepository;
 import ru.javawebinar.topjava.util.UsersUtil;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -47,9 +47,9 @@ public class InMemoryUserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> getAll() {
+    public Collection<User> getAll() {
         log.info("getAll");
-        return (List<User>) repository.values();
+        return repository.values();
     }
 
     @Override

@@ -31,6 +31,7 @@ public class MealServlet extends HttpServlet {
         ClassPathXmlApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         mealCtrl = appCtx.getBean(MealRestController.class);
         profileCtrl = appCtx.getBean(ProfileRestController.class);
+        SecurityUtil.setAuthUserId(1);
     }
 
     @Override
