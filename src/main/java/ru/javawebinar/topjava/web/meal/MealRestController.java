@@ -89,12 +89,25 @@ public class MealRestController {
     }
 
     public void delete(int id) {
-        log.info("delete {}", id);
-        service.delete(id);
+        if (isMyAndExist(id)) {
+            log.info("delete {}", id);
+            service.delete(id);
+        } else {
+            log.info("not exists or another user meal with id = {}", id);
+        }
     }
 
     public void update(Meal meal) {
-        log.info("update {}", meal);
-        service.update(meal);
+        int id = meal.getId();
+        if (isMyAndExist(id)) {
+            log.info("update {}", meal);
+            service.update(meal);
+        } else {
+            log.info("not exists or another user meal with id = {}", id);
+        }
+    }
+
+    private boolean isMyAndExist(int id) {
+        return service.get(id, SecurityUtil.getAuthUserId()) != null;
     }
 }

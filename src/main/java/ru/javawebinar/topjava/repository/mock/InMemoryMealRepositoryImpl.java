@@ -4,7 +4,6 @@ import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.repository.MealRepository;
 import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -31,12 +30,12 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
             return meal;
         }
         // treat case: update, but absent in storage
-        return isAuth(meal.getId()) ? repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal) : null;
+        return repository.computeIfPresent(meal.getId(), (id, oldMeal) -> meal);
     }
 
     @Override
     public boolean delete(int id) {
-        return isAuth(id) && repository.remove(id) != null;
+        return repository.remove(id) != null;
     }
 
     @Override
@@ -58,9 +57,5 @@ public class InMemoryMealRepositoryImpl implements MealRepository {
         return meals.stream()
                 .sorted(Comparator.comparing(Meal::getDateTime).reversed())
                 .collect(Collectors.toList()).isEmpty() ? null : meals;
-    }
-
-    private boolean isAuth(int id) {
-        return repository.get(id).getUserId() == SecurityUtil.getAuthUserId();
     }
 }
