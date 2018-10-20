@@ -11,7 +11,6 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.web.SecurityUtil;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeParseException;
 import java.util.List;
@@ -61,16 +60,15 @@ public class MealRestController {
             }
         }
 
-        List<Meal> meals = service.getAll(SecurityUtil.getAuthUserId());
+        if (!isDateValid) {
+            startDt = LocalDate.MIN;
+            endDt = LocalDate.MAX;
+        }
+
+        List<Meal> meals = service.getFilteredByDate(SecurityUtil.getAuthUserId(), startDt, endDt);
         int calories = SecurityUtil.authUserCaloriesPerDay();
 
-        if (isDateValid && isTimeValid) {
-            LocalDateTime startLdt = LocalDateTime.of(startDt, startTm);
-            LocalDateTime endLdt = LocalDateTime.of(endDt, endTm);
-            return MealsUtil.getFilteredWithExceeded(meals, calories, startLdt, endLdt);
-        } else if (isDateValid) {
-            return MealsUtil.getFilteredWithExceeded(meals, calories, startDt, endDt);
-        } else if (isTimeValid) {
+        if (isTimeValid) {
             return MealsUtil.getFilteredWithExceeded(meals, calories, startTm, endTm);
         } else {
             return MealsUtil.getWithExceeded(meals, calories);
@@ -97,8 +95,7 @@ public class MealRestController {
         }
     }
 
-    public void update(Meal meal) {
-        int id = meal.getId();
+    public void update(Meal meal, int id) {
         if (isMyAndExist(id)) {
             log.info("update {}", meal);
             service.update(meal);

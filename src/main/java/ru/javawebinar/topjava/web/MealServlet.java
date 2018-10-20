@@ -22,16 +22,23 @@ import java.util.Objects;
 public class MealServlet extends HttpServlet {
     private static final Logger log = LoggerFactory.getLogger(MealServlet.class);
 
+    private ClassPathXmlApplicationContext appCtx;
     private MealRestController mealCtrl;
     private ProfileRestController profileCtrl;
 
     @Override
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        ClassPathXmlApplicationContext appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
+        appCtx = new ClassPathXmlApplicationContext("spring/spring-app.xml");
         mealCtrl = appCtx.getBean(MealRestController.class);
         profileCtrl = appCtx.getBean(ProfileRestController.class);
         SecurityUtil.setAuthUserId(1);
+    }
+
+    @Override
+    public void destroy() {
+        super.destroy();
+        appCtx.close();
     }
 
     @Override
@@ -39,7 +46,7 @@ public class MealServlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String id = request.getParameter("id");
 
-        Meal meal = new Meal(id.isEmpty() ? null : Integer.valueOf(id),
+        Meal meal = new Meal(id == null || id.isEmpty() ? null : Integer.valueOf(id),
                 profileCtrl.get().getId(),
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
@@ -49,7 +56,7 @@ public class MealServlet extends HttpServlet {
         if (meal.isNew()) {
             mealCtrl.create(meal);
         } else {
-            mealCtrl.update(meal);
+            mealCtrl.update(meal, meal.getId());
         }
         response.sendRedirect("meals");
     }
