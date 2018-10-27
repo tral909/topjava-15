@@ -9,8 +9,14 @@
     <uri>http://topjava.javawebinar.ru/functions</uri>
 
     <function>
-        <name>formatDateTime</name>
+        <name>formatDateTimeNoT</name>
         <function-class>ru.javawebinar.topjava.util.DateTimeUtil</function-class>
-        <function-signature>java.lang.String toString(java.time.LocalDateTime)</function-signature>
+        <function-signature>java.lang.String toStringNoT(java.time.LocalDateTime)</function-signature>
+    </function>
+
+    <function>
+        <name>formatDateTimeWithT</name>
+        <function-class>ru.javawebinar.topjava.util.DateTimeUtil</function-class>
+        <function-signature>java.lang.String toStringWithT(java.time.LocalDateTime)</function-signature>
     </function>
 </taglib>

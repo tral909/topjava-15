@@ -8,14 +8,19 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class DateTimeUtil {
-    private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER_NO_T = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final DateTimeFormatter DATE_TIME_FORMATTER_WITH_T = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm");
 
     // DataBase doesn't support LocalDate.MIN/MAX
     public static final LocalDate MIN_DATE = LocalDate.of(1, 1, 1);
     public static final LocalDate MAX_DATE = LocalDate.of(3000, 1, 1);
 
-    public static String toString(LocalDateTime ldt) {
-        return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER);
+    public static String toStringNoT(LocalDateTime ldt) {
+        return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER_NO_T);
+    }
+
+    public static String toStringWithT(LocalDateTime ldt) {
+        return ldt == null ? "" : ldt.format(DATE_TIME_FORMATTER_WITH_T);
     }
 
     public static LocalDate parseLocalDate(String str) {
