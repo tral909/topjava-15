@@ -1,9 +1,6 @@
 package ru.javawebinar.topjava.service;
 
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.CacheManager;
 import org.springframework.core.env.Environment;
@@ -27,7 +24,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
     @Autowired
     protected UserService service;
 
-    @Autowired(required = false)
+    @Autowired
     private CacheManager cacheManager;
 
     @Autowired(required = false)
@@ -38,9 +35,11 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        Assume.assumeFalse(environment.acceptsProfiles(Profiles.of(JDBC)));
+        boolean isActiveJDBC = environment.acceptsProfiles(Profiles.of(JDBC));
         cacheManager.getCache("users").clear();
-        jpaUtil.clear2ndLevelHibernateCache();
+        if (!isActiveJDBC) {
+            jpaUtil.clear2ndLevelHibernateCache();
+        }
     }
 
     @Test
@@ -89,6 +88,7 @@ public abstract class AbstractUserServiceTest extends AbstractServiceTest {
         User updated = new User(USER);
         updated.setName("UpdatedName");
         updated.setCaloriesPerDay(330);
+        updated.setRoles(Collections.singleton(Role.ROLE_ADMIN));
         service.update(updated);
         assertMatch(service.get(USER_ID), updated);
     }
