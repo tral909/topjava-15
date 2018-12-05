@@ -11,24 +11,25 @@
 
 <div class="container">
     <h3 class="text-center"><spring:message code="meal.title"/></h3>
-    <form method="post" action="meals/filter">
+    <form id="betweenForm">
         <dl>
             <dt><spring:message code="meal.startDate"/>:</dt>
-            <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
+            <dd><input type="date" name="startDate"></dd><%--value="${param.startDate}"></dd>--%>
         </dl>
         <dl>
             <dt><spring:message code="meal.endDate"/>:</dt>
-            <dd><input type="date" name="endDate" value="${param.endDate}"></dd>
+            <dd><input type="date" name="endDate"></dd> <%--value="${param.endDate}"></dd>--%>
         </dl>
         <dl>
             <dt><spring:message code="meal.startTime"/>:</dt>
-            <dd><input type="time" name="startTime" value="${param.startTime}"></dd>
+            <dd><input type="time" name="startTime"></dd> <%--value="${param.startTime}"></dd>--%>
         </dl>
         <dl>
             <dt><spring:message code="meal.endTime"/>:</dt>
-            <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
+            <dd><input type="time" name="endTime"></dd> <%--value="${param.endTime}"></dd>--%>
         </dl>
-        <button type="submit"><spring:message code="meal.filter"/></button>
+        <button type="button" class="btn btn-success" onclick="between()"><spring:message code="meal.filter"/></button>
+        <button type="button" class="btn btn-secondary" onclick="dropFiltr()"><spring:message code="meal.clear"/></button>
     </form>
 </div>
 

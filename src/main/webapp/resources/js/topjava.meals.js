@@ -1,4 +1,5 @@
 const ajaxUrl = "ajax/profile/meals/";
+let ajaxUrlWithFilter;
 let datatableApi;
 
 // $(document).ready(function () {
@@ -34,3 +35,28 @@ $(function () {
     });
     makeEditable();
 });
+
+function between() {
+    let form = $('#betweenForm');
+    ajaxUrlWithFilter = ajaxUrl + 'between?' + form.serialize();
+    $.get(ajaxUrlWithFilter, function (data) {
+        datatableApi.clear().rows.add(data).draw();
+    });
+}
+
+function dropFiltr() {
+    $('#betweenForm').find(':input').val('');
+    ajaxUrlWithFilter = ajaxUrl;
+    $.ajax({
+        url: ajaxUrl,
+        type: 'GET',
+    }).done(function () {
+       updateTable();
+    });
+}
+
+function updateTable() {
+    $.get(ajaxUrlWithFilter, function (data) {
+        datatableApi.clear().rows.add(data).draw();
+    });
+}
