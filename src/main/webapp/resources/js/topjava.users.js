@@ -46,3 +46,23 @@ function updateTable() {
         datatableApi.clear().rows.add(data).draw();
     });
 }
+
+function changeEnabled(id_user, enabled) {
+    //$('#datatable input[name="user_enabled"]').change(function () {
+        // this will contain a reference to the checkbox
+        $.ajax({
+            type: "POST",
+            url: ajaxUrl + "enable",
+            data: "id=" + id_user + "&enabled=" + enabled,
+        }).done(function () {
+            updateTable();
+        });
+        /*if (this.checked) {
+            // the checkbox is now checked
+
+        } else {
+            // the checkbox is now no longer checked
+
+        }*/
+    //});
+}

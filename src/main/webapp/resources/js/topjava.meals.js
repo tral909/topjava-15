@@ -44,7 +44,7 @@ function between() {
     });
 }
 
-function dropFiltr() {
+function dropFilter() {
     $('#betweenForm').find(':input').val('');
     ajaxUrlWithFilter = ajaxUrl;
     $.ajax({

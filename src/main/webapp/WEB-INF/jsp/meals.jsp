@@ -29,7 +29,7 @@
             <dd><input type="time" name="endTime"></dd> <%--value="${param.endTime}"></dd>--%>
         </dl>
         <button type="button" class="btn btn-success" onclick="between()"><spring:message code="meal.filter"/></button>
-        <button type="button" class="btn btn-secondary" onclick="dropFiltr()"><spring:message code="meal.clear"/></button>
+        <button type="button" class="btn btn-secondary" onclick="dropFilter()"><spring:message code="meal.clear"/></button>
     </form>
 </div>
 
