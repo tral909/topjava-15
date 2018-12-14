@@ -24,8 +24,8 @@ public class UserTo extends BaseTo implements Serializable {
     @Size(min = 5, max = 32, message = "length must between 5 and 32 characters")
     private String password;
 
-    @Range(min = 10, max = 10000)
     @NotNull
+    @Range(min = 10, max = 10000)
     private Integer caloriesPerDay = UserUtil.DEFAULT_CALORIES_PER_DAY;
 
     public UserTo() {
