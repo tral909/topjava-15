@@ -86,6 +86,5 @@ $(function () {
             updateTable: function () {
                 $.get(userAjaxUrl, updateTableByData);
             }
-        }
-    );
+    });
 });

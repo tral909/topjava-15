@@ -1,6 +1,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -21,3 +21,9 @@
     <script type="text/javascript" src="webjars/datatables/1.10.19/js/dataTables.bootstrap4.min.js" defer></script>
     <script type="text/javascript" src="webjars/noty/3.1.4/lib/noty.min.js" defer></script>
 </head>
+<script type="text/javascript">
+    const i18n_noty = [];
+    <c:forEach var="key" items='<%=new String[]{"common.deleted","common.saved","common.enabled","common.disabled","common.errorStatus"}%>'>
+        i18n_noty["${key}"] = "<spring:message code="${key}"/>";
+    </c:forEach>
+</script>

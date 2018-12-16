@@ -65,7 +65,7 @@ function closeNoty() {
 function successNoty(key) {
     closeNoty();
     new Noty({
-        text: "<span class='fa fa-lg fa-check'></span> &nbsp;" + i18n[key],
+        text: "<span class='fa fa-lg fa-check'></span> &nbsp;" + i18n_noty[key],
         type: 'success',
         layout: "bottomRight",
         timeout: 1000
@@ -75,7 +75,7 @@ function successNoty(key) {
 function failNoty(jqXHR) {
     closeNoty();
     failedNote = new Noty({
-        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n["common.errorStatus"] + ": " + jqXHR.status + (jqXHR.responseJSON ? "<br>" + jqXHR.responseJSON : ""),
+        text: "<span class='fa fa-lg fa-exclamation-circle'></span> &nbsp;" + i18n_noty["common.errorStatus"] + ": " + jqXHR.status + (jqXHR.responseJSON ? "<br>" + jqXHR.responseJSON : ""),
         type: "error",
         layout: "bottomRight"
     }).show();
