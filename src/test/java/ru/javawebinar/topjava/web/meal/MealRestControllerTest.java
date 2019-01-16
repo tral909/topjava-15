@@ -4,6 +4,7 @@ package ru.javawebinar.topjava.web.meal;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
@@ -20,6 +21,7 @@ import static ru.javawebinar.topjava.UserTestData.*;
 import static ru.javawebinar.topjava.model.AbstractBaseEntity.START_SEQ;
 import static ru.javawebinar.topjava.util.MealsUtil.createWithExcess;
 import static ru.javawebinar.topjava.util.MealsUtil.getWithExcess;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -79,6 +81,20 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .andExpect(status().isNoContent());
 
         assertMatch(service.get(MEAL1_ID, START_SEQ), updated);
+    }
+
+    @Test
+    void testUpdateNoValidFields() throws Exception {
+        Meal noValidMeal = new Meal(MEAL1.getDateTime(), "Это самая не валидная еда!", 5001);
+        MvcResult result = mockMvc.perform(put(REST_URL + MEAL1_ID)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(noValidMeal))
+                .with(userHttpBasic(USER)))
+                .andExpect(status().isUnprocessableEntity())
+                .andReturn();
+
+        String responseText = result.getResponse().getContentAsString();
+        assertTrue(responseText.contains("calories must be between 10 and 5000"));
     }
 
     @Test
