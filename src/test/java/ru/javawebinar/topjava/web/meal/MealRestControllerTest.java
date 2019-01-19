@@ -84,11 +84,11 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testUpdateNoValidFields() throws Exception {
-        Meal noValidMeal = new Meal(MEAL1.getDateTime(), "Это самая не валидная еда!", 5001);
+    void testUpdateNonValidFields() throws Exception {
+        Meal nonValidMeal = new Meal(MEAL1.getDateTime(), "Это самая не валидная еда!", 5001);
         MvcResult result = mockMvc.perform(put(REST_URL + MEAL1_ID)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(JsonUtil.writeValue(noValidMeal))
+                .content(JsonUtil.writeValue(nonValidMeal))
                 .with(userHttpBasic(USER)))
                 .andExpect(status().isUnprocessableEntity())
                 .andReturn();

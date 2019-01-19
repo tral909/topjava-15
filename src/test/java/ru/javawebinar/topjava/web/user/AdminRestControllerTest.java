@@ -2,6 +2,7 @@ package ru.javawebinar.topjava.web.user;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.Role;
@@ -11,6 +12,7 @@ import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.Collections;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -109,6 +111,21 @@ class AdminRestControllerTest extends AbstractControllerTest {
 
         assertMatch(returned, expected);
         assertMatch(userService.getAll(), ADMIN, expected, USER);
+    }
+
+    @Test
+    void testCreateNonValidFields() throws Exception {
+        User nonValidUser = new User(null, "", "new@mail.ru", "somePass", 2100, Role.ROLE_USER);
+        MvcResult result = mockMvc.perform(post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .with(userHttpBasic(ADMIN))
+                .content(jsonWithPassword(nonValidUser, "somePass")))
+                .andExpect(status().isUnprocessableEntity())
+                .andDo(print())
+                .andReturn();
+        String responseText = result.getResponse().getContentAsString();
+        assertTrue(responseText.contains("name must not be blank"));
+        assertTrue(responseText.contains("name size must be between 2 and 100"));
     }
 
     @Test
