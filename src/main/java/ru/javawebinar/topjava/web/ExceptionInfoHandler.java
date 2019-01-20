@@ -39,6 +39,10 @@ public class ExceptionInfoHandler {
     @ResponseStatus(value = HttpStatus.CONFLICT)  // 409
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
+        Throwable rootCause = ValidationUtil.getRootCause(e);
+        if (rootCause.getMessage().toLowerCase().contains("unique_email")) {
+            return logAndGetErrorInfo(req, e, true, DATA_ERROR, "User with this email already exists");
+        }
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
 
@@ -73,9 +77,15 @@ public class ExceptionInfoHandler {
         return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getMessage(rootCause));
     }
 
+    //private static ErrorInfo logAndGetBindingValidationErrorInfo(HttpServletRequest req, BindException e, boolean logException, ErrorType errorType) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String message) {
+        logException(req, e, logException, errorType);
+        return new ErrorInfo(req.getRequestURL(), errorType, message);
+    }
+
     private static ErrorInfo logAndGetBindingValidationErrorInfo(HttpServletRequest req, BindException e, boolean logException, ErrorType errorType) {
         logException(req, e, logException, errorType);
-        return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getErrorResponse(e.getBindingResult()));
+        return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getMessage(e));
     }
 
     private static ErrorInfo logAndGetArgumentValidationErrorInfo(HttpServletRequest req, MethodArgumentNotValidException e, boolean logException, ErrorType errorType) {
