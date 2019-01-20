@@ -2,6 +2,8 @@ package ru.javawebinar.topjava.web;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -29,6 +31,9 @@ import static ru.javawebinar.topjava.util.exception.ErrorType.*;
 public class ExceptionInfoHandler {
     private static Logger log = LoggerFactory.getLogger(ExceptionInfoHandler.class);
 
+    @Autowired
+    MessageSource messageSource;
+
     //  http://stackoverflow.com/a/22358422/548473
     @ResponseStatus(value = HttpStatus.UNPROCESSABLE_ENTITY)
     @ExceptionHandler(NotFoundException.class)
@@ -41,7 +46,7 @@ public class ExceptionInfoHandler {
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (rootCause.getMessage().toLowerCase().contains("unique_email")) {
-            return logAndGetErrorInfo(req, e, true, DATA_ERROR, "User with this email already exists");
+            return logAndGetErrorInfo(req, e, true, DATA_ERROR, messageSource.getMessage("spring.validator.not.unique.email.user", null, null));
         }
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
@@ -85,7 +90,7 @@ public class ExceptionInfoHandler {
 
     private static ErrorInfo logAndGetBindingValidationErrorInfo(HttpServletRequest req, BindException e, boolean logException, ErrorType errorType) {
         logException(req, e, logException, errorType);
-        return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getMessage(e));
+        return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getErrorResponse(e.getBindingResult()));
     }
 
     private static ErrorInfo logAndGetArgumentValidationErrorInfo(HttpServletRequest req, MethodArgumentNotValidException e, boolean logException, ErrorType errorType) {
