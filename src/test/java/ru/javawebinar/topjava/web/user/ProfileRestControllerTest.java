@@ -4,6 +4,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.TestUtil;
 import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.UserTo;
@@ -88,5 +90,20 @@ class ProfileRestControllerTest extends AbstractControllerTest {
 
         String responseText = result.getResponse().getContentAsString();
         assertTrue(responseText.contains("password size must be between 5 and 32"));
+    }
+
+    @Test
+    @Transactional(propagation = Propagation.NEVER)
+    void testRegisterDuplicateEmail() throws Exception {
+        UserTo noValidUser = new UserTo(null, "Tony", "user@yandex.ru", "secPass", 2350);
+        MvcResult result = mockMvc.perform(post(REST_URL + "/register")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(noValidUser)))
+                .andDo(print())
+                .andExpect(status().isConflict())
+                .andReturn();
+
+        String responseText = result.getResponse().getContentAsString();
+        assertTrue(responseText.contains("Пользователь с таким email уже существует"));
     }
 }
