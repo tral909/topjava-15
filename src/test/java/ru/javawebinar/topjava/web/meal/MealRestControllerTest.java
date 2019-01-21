@@ -113,6 +113,11 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void testCreateDuplicateDateTime() throws Exception {
+
+    }
+
+    @Test
     void testGetAll() throws Exception {
         mockMvc.perform(get(REST_URL)
                 .with(userHttpBasic(USER)))

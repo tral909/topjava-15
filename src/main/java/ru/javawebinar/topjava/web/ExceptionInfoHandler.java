@@ -46,7 +46,10 @@ public class ExceptionInfoHandler {
     public ErrorInfo conflict(HttpServletRequest req, DataIntegrityViolationException e) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         if (rootCause.getMessage().toLowerCase().contains("unique_email")) {
-            return logAndGetErrorInfo(req, e, true, DATA_ERROR, messageSource.getMessage("spring.validator.not.unique.email.user", null, null));
+            return logAndGetErrorInfo(req, rootCause, true, DATA_ERROR, messageSource.getMessage("spring.validator.not.unique.email.user", null, null));
+        }
+        if (rootCause.getMessage().toLowerCase().contains("unique_user_datetime")) {
+            return logAndGetErrorInfo(req, rootCause, true, ErrorType.DATA_ERROR, messageSource.getMessage("spring.validator.not.unique.datetime", null, null));
         }
         return logAndGetErrorInfo(req, e, true, DATA_ERROR);
     }
@@ -76,14 +79,14 @@ public class ExceptionInfoHandler {
     }
 
 //    https://stackoverflow.com/questions/538870/should-private-helper-methods-be-static-if-they-can-be-static
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Throwable e, boolean logException, ErrorType errorType) {
         Throwable rootCause = ValidationUtil.getRootCause(e);
         logException(req, rootCause, logException, errorType);
         return new ErrorInfo(req.getRequestURL(), errorType, ValidationUtil.getMessage(rootCause));
     }
 
     //private static ErrorInfo logAndGetBindingValidationErrorInfo(HttpServletRequest req, BindException e, boolean logException, ErrorType errorType) {
-    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Exception e, boolean logException, ErrorType errorType, String message) {
+    private static ErrorInfo logAndGetErrorInfo(HttpServletRequest req, Throwable e, boolean logException, ErrorType errorType, String message) {
         logException(req, e, logException, errorType);
         return new ErrorInfo(req.getRequestURL(), errorType, message);
     }

@@ -87,6 +87,6 @@ class ProfileRestControllerTest extends AbstractControllerTest {
                 .andReturn();
 
         String responseText = result.getResponse().getContentAsString();
-        assertTrue(responseText.contains("password length must between 5 and 32 characters"));
+        assertTrue(responseText.contains("password size must be between 5 and 32"));
     }
 }
